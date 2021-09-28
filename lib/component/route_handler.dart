@@ -23,6 +23,10 @@ class RouteHandler {
     );
   }
 
-  Handler notFound() =>
-      Handler(handlerFunc: (context, parameters) => NotFoundPage());
+  Handler notFound() {
+    return Handler(handlerFunc: (context, parameters) {
+      return;
+    });
+  }
+
 }

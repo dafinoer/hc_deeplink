@@ -8,6 +8,7 @@ import 'package:hc_deeplink/repository/story_repository.dart';
 import 'component/route_handler.dart';
 import 'data/remote/top_story_service.dart';
 import 'utils/dio_setup.dart';
+import 'utils/dynamic_link_app.dart';
 import 'utils/interceptor_dio.dart';
 
 final injector = GetIt.instance;
@@ -19,6 +20,7 @@ class Injector {
     injector.registerSingleton<FluroRouter>(FluroRouter());
     injector.registerSingleton<RouteHandler>(RouteHandler());
     injector.registerSingleton<FluroRouterApp>(FluroRouterApp.create());
+    injector.registerLazySingleton<DynamicLinkApp>(() => DynamicLinkApp());
 
     dependencyInjection.createCache();
     dependencyInjection.createServices();

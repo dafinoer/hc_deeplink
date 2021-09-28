@@ -1,7 +1,9 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hc_deeplink/bloc/top_stories/top_stories_cubit.dart';
+import 'package:hc_deeplink/utils/dynamic_link_app.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,11 +14,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final TopStoriesCubit _topStoriesCubit;
+  late final DynamicLinkApp _dynamicLinkApp;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _topStoriesCubit = TopStoriesCubit.create();
+    _dynamicLinkApp = DynamicLinkApp.created();
+    initDynamicLink();
   }
 
   @override
@@ -52,5 +57,29 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _topStoriesCubit.close();
     super.dispose();
+  }
+
+  Future<void> initDynamicLink() async {
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData? dynamicLink) async {
+          final Uri? deepLink = dynamicLink?.link;
+
+          if (deepLink != null) {
+            debugPrint(deepLink.path);
+            // Navigator.pushNamed(context, deepLink.path);
+          }
+        },
+        onError: (OnLinkErrorException e) async {
+          print('onLinkError');
+          print(e.message);
+        }
+    );
+
+    final uriDynamicLink = await _dynamicLinkApp.getLinkFirebaseDynamicLink();
+    if(uriDynamicLink != null){
+      debugPrint(uriDynamicLink.toString());
+    }
+
+    return;
   }
 }

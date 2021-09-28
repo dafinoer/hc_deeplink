@@ -18,12 +18,12 @@ class FluroRouterApp {
   Route<dynamic>? onGenerated(RouteSettings settings) => _fluro.generator(settings);
 
   void defineRoute() {
+    _fluro.notFoundHandler = _rootHandler.notFound();
     _fluro.define('/', handler: _rootHandler.rootPageRouteHandler());
     _fluro.define(
       'comment/:',
       handler: _rootHandler.commentPageRouteHandler(),
       transitionType: TransitionType.fadeIn,
     );
-    // _fluro.notFoundHandler = _rootHandler.notFound();
   }
 }
